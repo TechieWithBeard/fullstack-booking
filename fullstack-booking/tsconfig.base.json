@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@fullstack-booking/libs": ["libs/src/index.ts"],
+      "@fullstack-booking/shared-config": ["libs/shared-config/src/index.ts"],
       "@fullstack-booking/shared-dtos": ["libs/shared-dtos/src/index.ts"]
     }
   },
