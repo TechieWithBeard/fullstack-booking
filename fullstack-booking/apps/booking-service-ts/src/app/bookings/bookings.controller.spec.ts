@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BookingsController } from './bookings.controller';
 import { BookingDto, BookingStatus } from '@fullstack-booking/shared-dtos';
 import { BookingsService } from './bookings.service';
+import { Controller } from '@nestjs/common';
 
 describe('BookingsController', () => {
   let controller: BookingsController;
@@ -31,10 +32,26 @@ describe('BookingsController', () => {
     // Mock service method
     jest.spyOn(service, 'findAll').mockImplementation(() => result);
 
-    const bookings = controller.findAll();
+    const bookings = controller.getAll();
 
     expect(bookings).toEqual(result);
     expect(bookings[0]).toBeInstanceOf(BookingDto);
     expect(bookings[0].status).toBe(BookingStatus.PENDING);
   });
+
+
+
+  it('should return a new added booking',()=>{
+  const newBooking =  new BookingDto(
+       '1', 'vishnu', 'hotel', new Date(), BookingStatus.PENDING
+      );
+      const booking= controller.create(newBooking);
+      expect(booking.userId).toBe('vishnu')
+      expect(booking.status).toBe(BookingStatus.PENDING)
+})
+
+
+
 });
+
+
