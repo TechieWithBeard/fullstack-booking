@@ -1,17 +1,17 @@
 import { BookingDto, BookingStatus } from '@fullstack-booking/shared-dtos';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class BookingsService {
+  constructor(private prisma:PrismaService){}
       private bookings: BookingDto[] = [];
 
-    findAll(): BookingDto[] {
-    return [new BookingDto('1', 'vishnu', 'hotel', new Date(), BookingStatus.PENDING)];
+    findAll():Promise<BookingDto[]> {
+   return this.prisma.booking.findMany();
   }
 
-  createBooking(booking:BookingDto):BookingDto{
- const newBooking = { ...booking, id: Date.now().toString() };
-    this.bookings.push(newBooking);
-    return newBooking
+  createBooking(booking:BookingDto):Promise<BookingDto>{
+    return this.prisma.booking.create({data:booking});
   }
 }

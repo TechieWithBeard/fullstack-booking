@@ -9,9 +9,18 @@ describe('BookingsController', () => {
   let service: BookingsService;
 
   beforeEach(async () => {
+     const mockBookingsService = {
+      findAll: jest.fn(),
+      createBooking: jest.fn(),
+    };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [BookingsController],
-      providers:[BookingsService]
+      providers:[
+        {
+          provide: BookingsService,
+          useValue: mockBookingsService,
+        }
+      ]
     }).compile();
 
     controller = module.get<BookingsController>(BookingsController);
@@ -22,7 +31,7 @@ describe('BookingsController', () => {
     expect(controller).toBeDefined();
   });
   
-  it('should return an array of bookings', () => {
+  it('should return an array of bookings', async () => {
     const result: BookingDto[] = [
       new BookingDto(
        '1', 'vishnu', 'hotel', new Date(), BookingStatus.PENDING
@@ -30,9 +39,9 @@ describe('BookingsController', () => {
     ];
 
     // Mock service method
-    jest.spyOn(service, 'findAll').mockImplementation(() => result);
+    jest.spyOn(service, 'findAll').mockResolvedValue(result);
 
-    const bookings = controller.getAll();
+    const bookings = await controller.getAll();
 
     expect(bookings).toEqual(result);
     expect(bookings[0]).toBeInstanceOf(BookingDto);
@@ -41,11 +50,12 @@ describe('BookingsController', () => {
 
 
 
-  it('should return a new added booking',()=>{
+  it('should return a new added booking',async ()=>{
   const newBooking =  new BookingDto(
        '1', 'vishnu', 'hotel', new Date(), BookingStatus.PENDING
       );
-      const booking= controller.create(newBooking);
+      (service.createBooking as jest.Mock).mockResolvedValue(newBooking);
+      const booking= await controller.create(newBooking);
       expect(booking.userId).toBe('vishnu')
       expect(booking.status).toBe(BookingStatus.PENDING)
 })
