@@ -1,20 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { PrismaService } from '../prisma.service';
-import { BookingsService } from './bookings.service';
-import { BookingsController } from './bookings.controller';
-import {AppModule} from '../app.module'
+import { AppModule } from '../app.module';
 describe('BookingController (integration)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule]
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
-     app.setGlobalPrefix('api');
+    app.setGlobalPrefix('api');
     await app.init();
   });
 
