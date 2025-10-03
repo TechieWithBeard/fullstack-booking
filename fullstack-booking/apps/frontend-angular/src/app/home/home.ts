@@ -1,5 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {BookingDto, BookingStatus} from '@fullstack-booking/shared-dtos'
+import {
+  BookingDto,
+  BookingStatus,
+  CreateBookingDto,
+} from '@fullstack-booking/shared-dtos';
 import { BookingService } from '../services/booking.service';
 @Component({
   selector: 'app-home',
@@ -8,23 +12,25 @@ import { BookingService } from '../services/booking.service';
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-  bookings: BookingDto[] = [];
+  bookings: (BookingDto | CreateBookingDto)[] = [];
 
-  #bookingService=inject(BookingService)
+  #bookingService = inject(BookingService);
 
   ngOnInit(): void {
-    this.#bookingService.getBookings().subscribe(data => (this.bookings = data));
+    this.#bookingService
+      .getBookings()
+      .subscribe((data) => (this.bookings = data));
   }
 
   addBooking(): void {
-    const newBooking: BookingDto = {
-      id: '',
+    const newBooking: CreateBookingDto = {
       userId: 'user-1',
       serviceId: 'service-1',
       bookingDate: new Date(),
       status: BookingStatus.PENDING,
     };
-    this.#bookingService.createBooking(newBooking).subscribe(b => {
+    this.#bookingService.createBooking(newBooking).subscribe((b) => {
       this.bookings.push(b);
     });
-  }}
+  }
+}

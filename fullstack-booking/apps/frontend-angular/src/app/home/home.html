@@ -1,8 +1,7 @@
- <h1>Bookings</h1>
-    <button (click)="addBooking()">Add Booking</button>
-    <ul>
-      @for (booking of bookings; track $index) {
-        
-        {{ booking.id }} - {{ booking.status }}
-      }
-    </ul>
+<h1>Bookings</h1>
+<button (click)="addBooking()">Add Booking</button>
+<ul>
+  @for (booking of bookings; track $index){
+  <li>{{ booking.userId }} - {{ booking.status }}</li>
+  }
+</ul>

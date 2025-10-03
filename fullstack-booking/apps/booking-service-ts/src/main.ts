@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 
@@ -11,9 +11,14 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
+  //whitelist: true -> strips any properties that do not have any decorators
+  //forbidNonWhitelisted: true -> throws an error if non-whitelisted properties are present
+  app.useGlobalPipes(
+    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })
+  );
   const port = process.env.PORT || 3000;
   app.enableCors({
-    origin: ['http://localhost:4200','http://localhost:4003'],
+    origin: ['http://localhost:4200', 'http://localhost:4003'],
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
   });
